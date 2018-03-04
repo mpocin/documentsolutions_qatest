@@ -36,14 +36,17 @@ public class RegisterPage {
 	private WebElement loginButton;
 
 	@FindBy(id = "create_account_error")
-    private WebElement msgError;
+    private WebElement msgErrorEmail;
+
+	@FindBy(css = ".alert.alert-danger")
+	private WebElement msgErrorWrongCredentials;
 
 	public RegisterPage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
 
-	public CreateAccountPage createAccountAsValidEmail(String email) {
+	public CreateAccountPage createAccountWithValidEmail(String email) {
 
 		registerEmail(email);
 
@@ -53,14 +56,29 @@ public class RegisterPage {
 		return new CreateAccountPage(driver);
 	}
 
-	public String createAsInvalidEmail(String email) {
+	public String createAccountWithInvalidEmail(String email) {
 
 		registerEmail(email);
 
         WebDriverWait wait = new WebDriverWait(driver, 500);
-        wait.until(ExpectedConditions.visibilityOf(msgError));
+        wait.until(ExpectedConditions.visibilityOf(msgErrorEmail));
 
-		return msgError.getText();
+		return msgErrorEmail.getText();
+	}
+
+	public MyAccountPage loginAsValidEmail(String email, String password) {
+		loginAs(email, password);
+
+		return new MyAccountPage(driver);
+	}
+
+	public String loginAsInvalidCredentials(String email, String password) {
+		loginAs(email, password);
+
+		WebDriverWait wait = new WebDriverWait(driver, 500);
+		wait.until(ExpectedConditions.visibilityOf(msgErrorWrongCredentials));
+
+		return msgErrorWrongCredentials.getText();
 	}
 
 	public String getPageTitle() {
@@ -73,9 +91,9 @@ public class RegisterPage {
 	    return driver.getCurrentUrl();
     }
 
-	public void loginAs(String username, String password) {
+	public void loginAs(String email, String password) {
 
-		inputEmail.sendKeys(username);
+		inputEmail.sendKeys(email);
 		inputPassword.sendKeys(password);
 		loginButton.click();
 	}

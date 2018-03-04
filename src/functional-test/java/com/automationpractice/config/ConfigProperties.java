@@ -40,6 +40,9 @@ public class ConfigProperties {
     @Value("${register.title}")
     private String registerTitle;
 
+    @Value("${myaccount.title}")
+    private String myAccountTitle;
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
@@ -123,5 +126,13 @@ public class ConfigProperties {
 
     public void setRegisterTitle(String registerTitle) {
         this.registerTitle = registerTitle;
+    }
+
+    public String getMyAccountTitle() {
+        return myAccountTitle;
+    }
+
+    public void setMyAccountTitle(String myAccountTitle) {
+        this.myAccountTitle = myAccountTitle;
     }
 }
