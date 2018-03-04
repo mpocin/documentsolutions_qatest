@@ -1,0 +1,80 @@
+/*
+ * Arquivo com configurações relativas ao Gradle
+ *
+ */
+
+apply plugin: 'java'
+apply plugin: 'org.unbroken-dome.test-sets'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+testSets {
+    functionalTest {
+        dirName = 'functional-test'
+    }
+}
+
+// Repositórios
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2'
+    }
+}
+
+// Dependências
+dependencies {
+
+    functionalTestCompile(
+        'org.seleniumhq.selenium:selenium-java:3.6.0',
+        'org.seleniumhq.selenium:selenium-firefox-driver:3.6.0',
+        'org.seleniumhq.selenium:selenium-remote-driver:3.6.0',
+        'org.seleniumhq.selenium:selenium-support:3.6.0',
+        'org.seleniumhq.selenium:selenium-api:3.6.0',
+        'com.google.guava:guava:23.0',
+        'org.springframework.boot:spring-boot-starter-test:1.5.8.RELEASE',
+        'junit:junit:4.12'
+    )
+
+}
+
+// Cria diferente relatórios baseado no tipo de teste
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+
+    testLogging {
+        exceptionFormat = 'full'
+        events "started", "passed", "skipped", "failed"
+        afterSuite { desc, result ->
+            if (!desc.parent) { // will match the outermost suite
+                println "Results: ${result.resultType} (${result.testCount} tests, " +
+                        "${result.successfulTestCount} successes, " +
+                        "${result.failedTestCount} failures, " +
+                        "${result.skippedTestCount} skipped)"
+            }
+        }
+    }
+}
+
+project.functionalTest {
+    outputs.upToDateWhen { false }
+}
+
+// Processa recursos necessários para a aplicação
+processFunctionalTestResources {
+    filesMatching('application.properties') {
+        filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                activeProfiles: activeProfiles
+        ]
+    }
+}
+
