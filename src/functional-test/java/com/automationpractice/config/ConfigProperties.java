@@ -13,8 +13,14 @@ public class ConfigProperties {
     @Value("${firefox.driver}")
     private String firefoxDriver;
 
+    @Value("${chrome.driver}")
+    private String chromeDriver;
+
     @Value("${firefox.driver.path}")
     private String firefoxDriverPath;
+
+    @Value("${chrome.driver.path}")
+    private String chromeDriverPath;
 
     @Value("${base.url}")
     public String baseURL;
@@ -53,6 +59,22 @@ public class ConfigProperties {
 
     public void setFirefoxDriverPath(String firefoxDriverPath) {
         this.firefoxDriverPath = firefoxDriverPath;
+    }
+
+    public String getChromeDriver() {
+        return chromeDriver;
+    }
+
+    public void setChromeDriver(String chromeDriver) {
+        this.chromeDriver = chromeDriver;
+    }
+
+    public String getChromeDriverPath() {
+        return chromeDriverPath;
+    }
+
+    public void setChromeDriverPath(String chromeDriverPath) {
+        this.chromeDriverPath = chromeDriverPath;
     }
 
     public String getBaseURL() {

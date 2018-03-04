@@ -7,6 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
@@ -27,11 +29,19 @@ public abstract class Setup {
 
 	@Before
 	public void setup() {
+		// Firefox
 		System.setProperty(properties.getFirefoxDriver(), properties.getFirefoxDriverPath());
 		FirefoxOptions firefoxOptions = new FirefoxOptions();
 		firefoxOptions.addArguments("--headless");
 
 		driver = new FirefoxDriver(firefoxOptions);
+
+		// Chrome
+//		System.setProperty(properties.getChromeDriver(), properties.getChromeDriverPath());
+//		ChromeOptions chromeOptions = new ChromeOptions();
+//		chromeOptions.addArguments("--headless");
+//
+//		driver = new ChromeDriver(chromeOptions);
 
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);

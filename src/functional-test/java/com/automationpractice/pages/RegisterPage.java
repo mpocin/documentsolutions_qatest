@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RegisterPage {
 
@@ -33,32 +35,33 @@ public class RegisterPage {
 	@CacheLookup
 	private WebElement loginButton;
 
+	@FindBy(id = "create_account_error")
+    private WebElement msgError;
+
 	public RegisterPage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
 
-//	public CreateAccountPage createAsValidEmail(String email) {
-//
-//		this.inputEmailCreate.sendKeys(email);
-//
-//		return new CreateAccountPage(driver);
-//	}
-//
-//	public RegisterPage createAsInvalidUser(String email) {
-//
-//		this.inputEmailCreate.sendKeys(email);
-//
-//		return new RegisterPage(driver);
-//	}
-//
-//	public MyAccountPage loginAsValidUser(String username, String password) {
-//
-//		loginAs(username, password);
-//
-//		return new MyAccountPage(driver);
-//
-//	}
+	public CreateAccountPage createAccountAsValidEmail(String email) {
+
+		registerEmail(email);
+
+		WebDriverWait wait = new WebDriverWait(driver, 500);
+		wait.until(ExpectedConditions.urlContains("account-creation"));
+
+		return new CreateAccountPage(driver);
+	}
+
+	public String createAsInvalidEmail(String email) {
+
+		registerEmail(email);
+
+        WebDriverWait wait = new WebDriverWait(driver, 500);
+        wait.until(ExpectedConditions.visibilityOf(msgError));
+
+		return msgError.getText();
+	}
 
 	public String getPageTitle() {
 
@@ -76,5 +79,11 @@ public class RegisterPage {
 		inputPassword.sendKeys(password);
 		loginButton.click();
 	}
+
+	public void registerEmail(String email) {
+
+        inputEmailCreate.sendKeys(email);
+        createButton.click();
+    }
 
 }

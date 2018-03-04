@@ -1,59 +1,61 @@
-//package com.automationpractice.tests;
-//
-//import static org.junit.Assert.assertEquals;
-//
-//import com.automationpractice.pages.MyAccountPage;
-//import com.automationpractice.pages.RegisterPage;
-//import com.automationpractice.setup.Setup;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.junit.Test;
-//
-//public class RegisterPageTest extends Setup {
-//
-//	@Value("${email.default}")
-//	private String userEmail;
-//
-//	@Value("${password.default}")
-//	private String userPassword;
-//
-//	private MyAccountPage myAccount;
-//	private RegisterPage register;
-//
-//	/**
-//	 *
-//	 */
-//	@Test
-//	public void shouldAccessWithValidCredentials() {
-//
-//		myAccount = new MyAccountPage(driver);
-//		register = new RegisterPage(driver);
-//
-//		// when
-//		register.loginAsValidUser(userEmail, userPassword);
-//
-//		// then
-//		assertEquals(dashBoard.getDashBoardUrl(), baseURL + "?controller=my-account");
-//
-//	}
-//
-//
-//	/**
-//	 *
-//	 */
-//	@Test
-//	public void deveMostrarMsgErroComCredencialInvalida() {
-//
-//		// given
-//		senhaUsuario = "12345";
-//
-//		register = new RegisterPage(driver);
-//
-//		// when
-//		register.logarComCredencialInvalida(userEmail, senhaUsuario);
-//
-//		// then
-//		assertEquals(register.getMsgTexto(), Messages.MSG_ERROR_INVAL_CRED);
-//
-//	}
-//
-//}
+package com.automationpractice.tests;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import com.automationpractice.pages.CreateAccountPage;
+import com.automationpractice.pages.HomePage;
+import com.automationpractice.pages.RegisterPage;
+import com.automationpractice.setup.Setup;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class RegisterPageTest extends Setup {
+
+    private HomePage home;
+	private RegisterPage register;
+	private CreateAccountPage createAccount;
+
+	@Before
+    public void setupRegisterPage() {
+	    home = new HomePage(driver);
+	    register = home.clickOnSignIn();
+    }
+
+	/**
+	 *
+	 */
+	@Test
+	public void shouldAccessCreateAccountWithValidCredentials() {
+
+		properties.setEmailDefault("test@bla.com");
+
+		// when
+		createAccount = register.createAccountAsValidEmail(properties.getEmailDefault());
+
+		// then
+		assertTrue(createAccount.getPageUrl().contains("account-creation"));
+
+	}
+
+
+	/**
+	 *
+	 */
+	@Test
+	public void shouldShowMsgWithInvalidEmail() {
+
+	    // given
+        properties.setEmailDefault("test@foo");
+
+		// when
+        String expectedMsg = register.createAsInvalidEmail(properties.getEmailDefault());
+
+		// then
+		assertEquals(expectedMsg, properties.getMsgErrorRegister());
+
+	}
+
+}
