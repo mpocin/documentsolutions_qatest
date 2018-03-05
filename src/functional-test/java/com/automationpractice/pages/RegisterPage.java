@@ -24,11 +24,11 @@ public class RegisterPage {
 	private WebElement createButton;
 
 	@FindBy(id = "email")
-	@CacheLookup
+	//@CacheLookup
 	private WebElement inputEmail;
 
 	@FindBy(id = "passwd")
-	@CacheLookup
+	//@CacheLookup
 	private WebElement inputPassword;
 
 	@FindBy(id = "SubmitLogin")
@@ -66,13 +66,16 @@ public class RegisterPage {
 		return msgErrorEmail.getText();
 	}
 
-	public MyAccountPage loginAsValidEmail(String email, String password) {
+	public MyAccountPage loginWithValidCredentials(String email, String password) {
 		loginAs(email, password);
+
+//		WebDriverWait wait = new WebDriverWait(driver, 500);
+//		wait.until(ExpectedConditions.urlContains("my-account"));
 
 		return new MyAccountPage(driver);
 	}
 
-	public String loginAsInvalidCredentials(String email, String password) {
+	public String loginWithInvalidCredentials(String email, String password) {
 		loginAs(email, password);
 
 		WebDriverWait wait = new WebDriverWait(driver, 500);
@@ -93,7 +96,9 @@ public class RegisterPage {
 
 	public void loginAs(String email, String password) {
 
+		inputEmail.clear();
 		inputEmail.sendKeys(email);
+		inputPassword.clear();
 		inputPassword.sendKeys(password);
 		loginButton.click();
 	}

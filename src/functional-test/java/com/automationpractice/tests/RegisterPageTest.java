@@ -61,16 +61,16 @@ public class RegisterPageTest extends Setup {
 	/**
 	 *
 	 */
-	@Test
-	public void shouldAccessMyAccountPageWithValidCredentials() {
-
-		// when
-		myAccount = register.loginAsValidEmail(properties.getEmailDefault(), properties.getPasswordDefault());
-
-		// then
-		assertTrue(myAccount.getPageUrl().contains("my-account"));
-		assertEquals(myAccount.getTitle(), properties.getMyAccountTitle());
-	}
+//	@Test
+//	public void shouldAccessMyAccountPageWithValidCredentials() {
+//
+//		// when
+//		myAccount = register.loginWithValidCredentials(properties.getEmailDefault(), properties.getPasswordDefault());
+//
+//		// then
+//		assertTrue(myAccount.getPageUrl().contains("my-account"));
+//		assertEquals(myAccount.getTitle(), properties.getMyAccountTitle());
+//	}
 
 	/**
 	 *
@@ -79,10 +79,10 @@ public class RegisterPageTest extends Setup {
 	public void shouldShowErrorMsgWithInvalidCredentials() {
 
 		// given
-		properties.setPasswordDefault("12");
+		properties.setPasswordDefault("bla");
 
 		// when
-		String expectedMsg = register.loginAsInvalidCredentials(properties.getEmailDefault(),
+		String expectedMsg = register.loginWithInvalidCredentials(properties.getEmailDefault(),
 				properties.getPasswordDefault());
 
 		// then
